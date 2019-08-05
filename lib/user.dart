@@ -1,15 +1,15 @@
 class User {
-  final String name;
-  final String email;
+  String username;
+  String email;
 
-  User(this.name, this.email);
+  User(this.username, this.email);
 
   User.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : username = json['username'],
         email = json['email'];
 
   Map<String, dynamic> toJson() => {
-        'name': name,
+        'username': username,
         'email': email,
       };
 }

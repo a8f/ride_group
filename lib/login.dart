@@ -1,13 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'util.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'generated/i18n.dart';
 import 'profile.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'user.dart';
 import 'server.dart';
-import 'package:flutter/foundation.dart';
+import 'user.dart';
+import 'util.dart';
+import 'register.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,8 +19,13 @@ class LoginPage extends StatefulWidget {
 class LoginState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  bool loginLoading = false, noServerConnection = false;
+  Server server;
 
-  Future<Server> googleLogin() async {
+  Future<bool> googleLogin() async {
+    setState(() {
+      loginLoading = true;
+    });
     GoogleSignInAccount account = await googleSignIn.signIn();
     GoogleSignInAuthentication auth = await account.authentication;
 
@@ -28,9 +35,8 @@ class LoginState extends State<LoginPage> {
     FirebaseUser user = await _auth.signInWithCredential(credential);
     assert(!user.isAnonymous);
     assert(user.getIdToken() != null);
-    Server server = Server(user);
-    assert(await server.authFirebaseUser());
-    return server;
+    this.server = Server(user);
+    return server.authenticate();
   }
 
   @override
@@ -39,6 +45,7 @@ class LoginState extends State<LoginPage> {
       appBar: AppBar(title: Text(S.of(context).loginTitle)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -46,20 +53,41 @@ class LoginState extends State<LoginPage> {
               GoogleSignInButton(
                 onPressed: () {
                   googleLogin().then((loginResult) {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return ProfilePage(
-                          server: loginResult, user: User('name', 'email'));
-                    }));
+                    if (loginResult) {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return ProfilePage(
+                            server: this.server, user: Server.user);
+                      }));
+                    } else {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return RegisterPage(
+                            server: this.server);
+                      }));
+                    }
                   });
                 },
                 darkMode: true,
-              )
+              ),
             ],
-          )
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Visibility(
+                    visible: loginLoading,
+                    child: SpinKitRing(color: Theme.of(context).accentColor)))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Visibility(
+                    visible: noServerConnection,
+                    child: Text(S.of(context).serverConnectionFail)))
+          ])
         ],
       ),
-      drawer: getNavDrawer(context),
     );
   }
 }

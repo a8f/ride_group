@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
-import 'util.dart';
+
 import 'generated/i18n.dart';
-import 'user.dart';
 import 'server.dart';
+import 'util.dart';
 
-class ProfilePage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   final Server server;
-  final User user;
 
-  ProfilePage({
+  RegisterPage({
     Key key,
     @required this.server,
-    @required this.user,
   }) : super(key: key);
+
+  @override
+  RegisterState createState() => RegisterState();
+}
+
+class RegisterState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).loginTitle)),
+      appBar: AppBar(title: Text(S.of(context).registrationTitle)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[Text('Logged in')],
-          )
+            children: <Widget>[Text('Setup profile')],
+          ),
         ],
       ),
       drawer: getNavDrawer(context),

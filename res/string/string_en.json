@@ -1,5 +1,7 @@
 {
   "appTitle": "RideGroup",
   "myRidesTitle": "My Rides",
-  "loginTitle": "Login"
+  "loginTitle": "RideGroup",
+  "serverConnectionFail": "Failed to connect to server",
+  "registrationTitle": "Register"
 }
