@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'util.dart';
+
 import 'generated/i18n.dart';
 import 'user.dart';
-import 'server.dart';
+import 'util.dart';
 
 class ProfilePage extends StatelessWidget {
-  final Server server;
   final User user;
 
   ProfilePage({
     Key key,
-    @required this.server,
     @required this.user,
   }) : super(key: key);
 

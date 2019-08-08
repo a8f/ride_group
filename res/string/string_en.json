@@ -2,6 +2,17 @@
   "appTitle": "RideGroup",
   "myRidesTitle": "My Rides",
   "loginTitle": "RideGroup",
-  "serverConnectionFail": "Failed to connect to server",
-  "registrationTitle": "Register"
+  "serverConnectionFail": "RideGroup server isn't responding. Try again in a bit.",
+  "registrationTitle": "Register",
+  "usernameLabel": "Username",
+  "emailLabel": "Email",
+  "phoneLabel": "Phone",
+  "firstNameLabel": "First Name",
+  "lastNameLabel": "Last Name",
+  "usernameRequirements": "Username must be at least 4 characters and can only contain letters, numbers, and underscores",
+  "invalidEmail": "Invalid email",
+  "submitRegistration": "Register",
+  "invalidName": "Invalid name",
+  "invalidPhone": "Invalid phone number",
+  "loginError": "Unable to login. Please try again."
 }

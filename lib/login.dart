@@ -3,24 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'generated/i18n.dart';
 import 'profile.dart';
-import 'server.dart';
-import 'user.dart';
-import 'util.dart';
 import 'register.dart';
+import 'server.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  LoginState createState() => LoginState();
+  LoginState createState() {
+    return LoginState();
+  }
 }
 
 class LoginState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  bool loginLoading = false, noServerConnection = false;
+  bool loginLoading = false, noServerConnection = false, loginError = false;
   Server server;
+  bool savedLoginTried = false;
 
   Future<bool> googleLogin() async {
     setState(() {
@@ -36,11 +38,58 @@ class LoginState extends State<LoginPage> {
     assert(!user.isAnonymous);
     assert(user.getIdToken() != null);
     this.server = Server(user);
-    return server.authenticate();
+    return await Server.authenticate().catchError((error) {
+      setState(() {
+        noServerConnection = true;
+        loginLoading = false;
+      });
+    });
+  }
+
+  asyncGoogleSignIn(BuildContext context) async {
+    googleLogin().then((loginResult) async {
+      if (loginResult) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authMethod', 'google');
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return ProfilePage(user: Server.user);
+        }));
+      } else {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('authMethod');
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return RegisterPage(server: this.server);
+        }));
+      }
+      setState(() {
+        loginLoading = false;
+        loginError = true;
+      });
+    });
+  }
+
+  loginWithSavedMethod(BuildContext context) async {
+    setState(() {
+      loginError = false;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    String authMethod = prefs.getString('authMethod') ?? '';
+    if (authMethod.isEmpty) return;
+    switch (authMethod) {
+      case 'google':
+        asyncGoogleSignIn(context);
+        break;
+      default:
+        return;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!savedLoginTried) {
+      savedLoginTried = true;
+      loginWithSavedMethod(context);
+    }
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).loginTitle)),
       body: Column(
@@ -52,21 +101,7 @@ class LoginState extends State<LoginPage> {
             children: <Widget>[
               GoogleSignInButton(
                 onPressed: () {
-                  googleLogin().then((loginResult) {
-                    if (loginResult) {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return ProfilePage(
-                            server: this.server, user: Server.user);
-                      }));
-                    } else {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return RegisterPage(
-                            server: this.server);
-                      }));
-                    }
-                  });
+                  asyncGoogleSignIn(context);
                 },
                 darkMode: true,
               ),
@@ -85,7 +120,13 @@ class LoginState extends State<LoginPage> {
                 child: Visibility(
                     visible: noServerConnection,
                     child: Text(S.of(context).serverConnectionFail)))
-          ])
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Visibility(
+                    visible: loginError, child: Text(S.of(context).loginError)))
+          ]),
         ],
       ),
     );

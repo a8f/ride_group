@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'generated/i18n.dart';
 import 'login.dart';
 import 'util.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(App());
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
