@@ -8,18 +8,13 @@ import 'package:http/http.dart' as http;
 import 'user.dart';
 
 class Server {
-  /// A connection to the server
+  /// The connection to the server
 
   static FirebaseUser firebaseUser;
-  final FirebaseUser _firebaseUser;
   static final endpoint = 'http://10.0.2.2:8000/';
   static User user;
 
-  Server(this._firebaseUser) {
-    if (Server.firebaseUser == null) {
-      Server.firebaseUser = this._firebaseUser;
-    }
-  }
+  static bool isInitialized() => firebaseUser != null;
 
   static Future<String> authorizationHeader() async {
     return 'RideGroupFirebaseToken ' + await firebaseUser.getIdToken();
@@ -60,7 +55,6 @@ class Server {
     if (response.statusCode != 200) {
       throw StateError('Unable to connect to server');
     }
-    assert(response.statusCode == 200);
     debugPrint(response.body);
     Map<String, dynamic> jsonUser = json.decode(response.body);
     user = User.fromJson(jsonUser);

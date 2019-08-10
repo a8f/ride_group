@@ -5,23 +5,20 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'base_app.dart';
 import 'generated/i18n.dart';
-import 'profile.dart';
 import 'register.dart';
 import 'server.dart';
 
-class LoginPage extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
-  LoginState createState() {
-    return LoginState();
-  }
+  LoginState createState() => LoginState();
 }
 
-class LoginState extends State<LoginPage> {
+class LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   bool loginLoading = false, noServerConnection = false, loginError = false;
-  Server server;
   bool savedLoginTried = false;
 
   Future<bool> googleLogin() async {
@@ -37,7 +34,7 @@ class LoginState extends State<LoginPage> {
     FirebaseUser user = await _auth.signInWithCredential(credential);
     assert(!user.isAnonymous);
     assert(user.getIdToken() != null);
-    this.server = Server(user);
+    Server.firebaseUser = user;
     return await Server.authenticate().catchError((error) {
       setState(() {
         noServerConnection = true;
@@ -51,20 +48,17 @@ class LoginState extends State<LoginPage> {
       if (loginResult) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('authMethod', 'google');
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return ProfilePage(user: Server.user);
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return BaseApp();
         }));
       } else {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('authMethod');
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return RegisterPage(server: this.server);
+          return Register();
         }));
       }
-      setState(() {
-        loginLoading = false;
-        loginError = true;
-      });
     });
   }
 

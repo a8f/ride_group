@@ -1,14 +1,12 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
+import 'base_app.dart';
 import 'generated/i18n.dart';
-import 'profile.dart';
 import 'server.dart';
 
-class RegisterPage extends StatelessWidget {
-  final Server server;
-
-  RegisterPage({Key key, @required this.server}) : super(key: key);
+class Register extends StatelessWidget {
+  Register({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +65,9 @@ class RegistrationFormState extends State<RegistrationForm> {
       }
       Navigator.popUntil(
           context, ModalRoute.withName(Navigator.defaultRouteName));
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return ProfilePage(user: Server.user);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return BaseApp();
       }));
     }
   }

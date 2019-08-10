@@ -1,6 +1,5 @@
 {
   "appTitle": "RideGroup",
-  "myRidesTitle": "My Rides",
   "loginTitle": "RideGroup",
   "serverConnectionFail": "RideGroup server isn't responding. Try again in a bit.",
   "registrationTitle": "Register",
@@ -14,5 +13,8 @@
   "submitRegistration": "Register",
   "invalidName": "Invalid name",
   "invalidPhone": "Invalid phone number",
-  "loginError": "Unable to login. Please try again."
+  "loginError": "Unable to login. Please try again.",
+  "homeNavBarTitle": "Home",
+  "profileNavBarTitle": "Profile",
+  "ridesNavBarTitle": "Rides"
 }

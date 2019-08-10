@@ -4,28 +4,27 @@ import 'generated/i18n.dart';
 import 'user.dart';
 import 'util.dart';
 
-class ProfilePage extends StatelessWidget {
+class Profile extends StatelessWidget {
   final User user;
 
-  ProfilePage({
+  Profile({
     Key key,
     @required this.user,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).loginTitle)),
-      body: Column(
+    // TODO
+    return Container(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[Text('Logged in')],
+            children: <Widget>[Text('Profile of ' + user.username)],
           )
         ],
       ),
-      drawer: getNavDrawer(context),
     );
   }
 }

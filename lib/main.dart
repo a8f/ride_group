@@ -11,8 +11,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: S().appTitle,
-      home: LoginPage(),
-      theme: getTheme(context),
+      home: Login(),
+      theme: theme,
       localizationsDelegates: [
         S.delegate,
       ],
