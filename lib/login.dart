@@ -45,19 +45,21 @@ class LoginState extends State<Login> {
 
   asyncGoogleSignIn(BuildContext context) async {
     googleLogin().then((loginResult) async {
+      if (loginResult == null) {
+        setState(() => noServerConnection = true);
+        debugPrint('failed to sign in');
+        return;
+      }
       if (loginResult) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('authMethod', 'google');
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) {
-          return BaseApp();
-        }));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => BaseApp()));
       } else {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('authMethod');
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return Register();
-        }));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Register()));
       }
     });
   }

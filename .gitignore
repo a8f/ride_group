@@ -3,6 +3,7 @@ flutter_*.log
 lib/generated/
 android/app/google-services.json
 pubspec.lock
+.gradle/
 
 # Miscellaneous
 *.class

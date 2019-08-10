@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'generated/i18n.dart';
 import 'login.dart';
 import 'util.dart';
+import 'theme.dart';
 
 void main() => runApp(App());
 

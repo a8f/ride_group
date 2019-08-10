@@ -16,5 +16,6 @@
   "loginError": "Unable to login. Please try again.",
   "homeNavBarTitle": "Home",
   "profileNavBarTitle": "Profile",
-  "ridesNavBarTitle": "Rides"
+  "ridesNavBarTitle": "My Rides",
+  "rideSearchNavBarTitle": "Find A Ride"
 }

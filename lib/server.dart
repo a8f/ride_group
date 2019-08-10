@@ -11,7 +11,8 @@ class Server {
   /// The connection to the server
 
   static FirebaseUser firebaseUser;
-  static final endpoint = 'http://10.0.2.2:8000/';
+  static final endpoint =
+      'http://10.0.2.2:8000/'; // endpoint url with trailing slash
   static User user;
 
   static bool isInitialized() => firebaseUser != null;
@@ -29,7 +30,6 @@ class Server {
   }
 
   static Future<http.Response> postRequest(String path, dynamic body) async {
-    debugPrint(path);
     if (path[0] == '/') path = path.substring(1);
     if (path[path.length - 1] != '/') path += '/';
     return http.post(endpoint + path,
@@ -39,7 +39,6 @@ class Server {
 
   static Future<bool> testConnection() async {
     http.Response response = await getRequest('ping/');
-    debugPrint(response.headers.toString());
     return response.statusCode == 200;
   }
 
@@ -51,11 +50,10 @@ class Server {
      */
     http.Response response =
         await getRequest('login/').timeout(const Duration(seconds: 10));
-    debugPrint(response.toString());
+    debugPrint(response.statusCode.toString());
     if (response.statusCode != 200) {
       throw StateError('Unable to connect to server');
     }
-    debugPrint(response.body);
     Map<String, dynamic> jsonUser = json.decode(response.body);
     user = User.fromJson(jsonUser);
     return jsonUser['setup_complete'];

@@ -6,5 +6,4 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'home.dart';
 import 'profile.dart';
 import 'server.dart';
-
-final ThemeData theme = ThemeData(primaryColor: Colors.deepPurple);
+import 'theme.dart';

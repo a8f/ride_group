@@ -10,7 +10,12 @@ class Rides extends StatelessWidget {
     return Container(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[Center(child: Text('Rides'))],
+      children: <Widget>[
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[]),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text('My Rides')])
+      ],
     ));
   }
 }
