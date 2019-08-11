@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'generated/i18n.dart';
 import 'server.dart';
+import 'util.dart';
 
-class Rides extends StatelessWidget {
+class Rides extends StatelessWidget implements AppBarPage {
   @override
   Widget build(BuildContext context) {
     // TODO
@@ -18,4 +19,8 @@ class Rides extends StatelessWidget {
       ],
     ));
   }
+
+  @override
+  AppBar getAppBar(BuildContext context) => new AppBar(
+      title: Text(S.of(context).ridesAppBarTitle(Server.user.firstName)));
 }

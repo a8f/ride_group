@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'base_app.dart';
 import 'generated/i18n.dart';
 import 'server.dart';
+import 'util.dart';
 
 class Register extends StatelessWidget {
   Register({Key key}) : super(key: key);
@@ -17,9 +18,6 @@ class Register extends StatelessWidget {
   }
 }
 
-const EdgeInsets FORM_PADDING =
-    EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
-const EdgeInsets SUBMIT_BUTTON_PADDING = EdgeInsets.symmetric(vertical: 16.0);
 final lettersAndNumbersRegex = RegExp(r'^[\da-zA-Z_]+$');
 final lettersRegex = RegExp(r'^[A-Za-z]+$');
 
@@ -49,7 +47,7 @@ class RegistrationFormState extends State<RegistrationForm> {
     phoneController.text = Server.user.phone;
   }
 
-  register() async {
+  void register() async {
     // Hide keyboard
     FocusScope.of(context).requestFocus(new FocusNode());
     if (formKey.currentState.validate()) {
@@ -158,7 +156,6 @@ class RegistrationFormState extends State<RegistrationForm> {
                         child: Center(
                             child: MaterialButton(
                           child: Text(S.of(context).submitRegistration),
-                          color: Theme.of(context).backgroundColor,
                           onPressed: register,
                         )))
                   ],

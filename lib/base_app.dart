@@ -5,7 +5,7 @@ import 'server.dart';
 import 'util.dart';
 import 'theme.dart';
 import 'home.dart';
-import 'profile.dart';
+import 'account.dart';
 import 'rides.dart';
 import 'search.dart';
 import 'create_ride.dart';
@@ -16,17 +16,19 @@ class BaseApp extends StatefulWidget {
 }
 
 class BaseAppState extends State<BaseApp> {
-  final List<Widget> _screens = [
-    Home(),
-    Rides(),
-    Search(),
-    Profile(user: Server.user)
-  ];
+  final List<Widget> _screens = [Home(), Rides(), Search(), Account()];
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    if (currentIndex < 0 || currentIndex >= _screens.length) {
+      debugPrint('Invalid screen index $currentIndex');
+      currentIndex = 0;
+    }
     return Scaffold(
+      appBar: _screens[currentIndex] is AppBarPage
+          ? (_screens[currentIndex] as AppBarPage).getAppBar(context)
+          : null,
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
@@ -42,7 +44,7 @@ class BaseAppState extends State<BaseApp> {
                 title: Text(S.of(context).rideSearchNavBarTitle)),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                title: Text(S.of(context).profileNavBarTitle))
+                title: Text(S.of(context).accountNavBarTitle))
           ],
           onTap: (i) => setState(() => currentIndex = i)),
       body: _screens[currentIndex],

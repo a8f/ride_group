@@ -15,7 +15,15 @@
   "invalidPhone": "Invalid phone number",
   "loginError": "Unable to login. Please try again.",
   "homeNavBarTitle": "Home",
-  "profileNavBarTitle": "Profile",
+  "accountNavBarTitle": "Account",
   "ridesNavBarTitle": "My Rides",
-  "rideSearchNavBarTitle": "Find A Ride"
+  "rideSearchNavBarTitle": "Find Rides",
+  "homeAppBarTitle": "RideGroup",
+  "ridesAppBarTitle": "${name}'s Rides",
+  "searchAppBarTitle": "Find A Ride",
+  "rideTitleLabel": "Ride Name",
+  "rideDescriptionLabel": "Description",
+  "createRide": "Create",
+  "selectStartLocation": "Start from...",
+  "selectEndLocation": "Go to..."
 }
