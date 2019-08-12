@@ -4,7 +4,7 @@ import 'generated/i18n.dart';
 import 'server.dart';
 import 'util.dart';
 
-class Account extends StatelessWidget implements AppBarPage {
+class Account extends StatelessWidget implements AppBarPageBase {
   @override
   Widget build(BuildContext context) {
     // TODO
@@ -14,7 +14,7 @@ class Account extends StatelessWidget implements AppBarPage {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[Text(Server.user.username)],
+            children: <Widget>[Text(user.username)],
           )
         ],
       ),
@@ -22,5 +22,6 @@ class Account extends StatelessWidget implements AppBarPage {
   }
 
   @override
-  AppBar getAppBar(BuildContext context) => new AppBar(title: Text('$Server'));
+  AppBar getAppBar(BuildContext context) =>
+      new AppBar(title: Text(user.fullName()));
 }

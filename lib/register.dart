@@ -13,7 +13,7 @@ class Register extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).registrationTitle)),
-      body: RegistrationForm(),
+      body: _RegistrationForm(),
     );
   }
 }
@@ -21,43 +21,42 @@ class Register extends StatelessWidget {
 final lettersAndNumbersRegex = RegExp(r'^[\da-zA-Z_]+$');
 final lettersRegex = RegExp(r'^[A-Za-z]+$');
 
-class RegistrationForm extends StatefulWidget {
-  RegistrationFormState createState() => RegistrationFormState();
+class _RegistrationForm extends StatefulWidget {
+  _RegistrationFormState createState() => _RegistrationFormState();
 }
 
-class RegistrationFormState extends State<RegistrationForm> {
-  final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
-  final emailController = TextEditingController();
-  final emailFocusNode = FocusNode();
-  final firstNameController = TextEditingController();
-  final firstNameFocusNode = FocusNode();
-  final lastNameController = TextEditingController();
-  final lastNameFocusNode = FocusNode();
-  final phoneController = TextEditingController();
-  final phoneFocusNode = FocusNode();
+class _RegistrationFormState extends State<_RegistrationForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _firstNameController = TextEditingController();
+  final _firstNameFocusNode = FocusNode();
+  final _lastNameController = TextEditingController();
+  final _lastNameFocusNode = FocusNode();
+  final _phoneController = TextEditingController();
+  final _phoneFocusNode = FocusNode();
 
   @override
   initState() {
     super.initState();
-    usernameController.text = Server.user.username;
-    emailController.text = Server.user.email;
-    firstNameController.text = Server.user.firstName;
-    lastNameController.text = Server.user.lastName;
-    phoneController.text = Server.user.phone;
+    _usernameController.text = user.username;
+    _emailController.text = user.email;
+    _firstNameController.text = user.firstName;
+    _lastNameController.text = user.lastName;
+    _phoneController.text = user.phone;
   }
 
   void register() async {
     // Hide keyboard
     FocusScope.of(context).requestFocus(new FocusNode());
-    if (formKey.currentState.validate()) {
-      Server.user.username = usernameController.text;
-      Server.user.email = emailController.text;
-      Server.user.firstName = firstNameController.text;
-      Server.user.lastName = lastNameController.text;
-      if (phoneController.text.isNotEmpty)
-        Server.user.phone = phoneController.text;
-      if (!await Server.registerUser()) {
+    if (_formKey.currentState.validate()) {
+      user.username = _usernameController.text;
+      user.email = _emailController.text;
+      user.firstName = _firstNameController.text;
+      user.lastName = _lastNameController.text;
+      if (_phoneController.text.isNotEmpty) user.phone = _phoneController.text;
+      if (!await registerUser()) {
         // TODO
         return;
       }
@@ -76,33 +75,33 @@ class RegistrationFormState extends State<RegistrationForm> {
         padding: FORM_PADDING,
         child: Center(
             child: Form(
-                key: formKey,
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
                         textCapitalization: TextCapitalization.none,
-                        controller: usernameController,
+                        controller: _usernameController,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
-                            hintText: Server.user.username,
+                            hintText: user.username,
                             labelText: S.of(context).usernameLabel),
-                        onFieldSubmitted: (x) =>
-                            FocusScope.of(context).requestFocus(emailFocusNode),
+                        onFieldSubmitted: (x) => FocusScope.of(context)
+                            .requestFocus(_emailFocusNode),
                         validator: (val) => (val.length > 3 &&
                                 lettersAndNumbersRegex.hasMatch(val))
                             ? null
                             : S.of(context).usernameRequirements),
                     TextFormField(
                         textCapitalization: TextCapitalization.none,
-                        controller: emailController,
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             labelText: S.of(context).emailLabel),
                         onFieldSubmitted: (x) => FocusScope.of(context)
-                            .requestFocus(firstNameFocusNode),
+                            .requestFocus(_firstNameFocusNode),
                         validator: (val) => EmailValidator.validate(val)
                             ? null
                             : S.of(context).invalidEmail),
@@ -112,13 +111,13 @@ class RegistrationFormState extends State<RegistrationForm> {
                         Expanded(
                           child: TextFormField(
                               textCapitalization: TextCapitalization.words,
-                              controller: firstNameController,
+                              controller: _firstNameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
                                   labelText: S.of(context).firstNameLabel),
                               onFieldSubmitted: (x) => FocusScope.of(context)
-                                  .requestFocus(lastNameFocusNode),
+                                  .requestFocus(_lastNameFocusNode),
                               validator: (val) => lettersRegex.hasMatch(val)
                                   ? null
                                   : S.of(context).invalidName),
@@ -127,13 +126,13 @@ class RegistrationFormState extends State<RegistrationForm> {
                         Expanded(
                           child: TextFormField(
                               textCapitalization: TextCapitalization.words,
-                              controller: lastNameController,
+                              controller: _lastNameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
                                   labelText: S.of(context).lastNameLabel),
                               onFieldSubmitted: (x) => FocusScope.of(context)
-                                  .requestFocus(lastNameFocusNode),
+                                  .requestFocus(_lastNameFocusNode),
                               validator: (val) => lettersRegex.hasMatch(val)
                                   ? null
                                   : S.of(context).invalidName),
@@ -141,7 +140,7 @@ class RegistrationFormState extends State<RegistrationForm> {
                       ],
                     ),
                     TextFormField(
-                        controller: phoneController,
+                        controller: _phoneController,
                         keyboardType: TextInputType.phone,
                         textInputAction: TextInputAction.go,
                         decoration: InputDecoration(

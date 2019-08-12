@@ -4,6 +4,7 @@ lib/generated/
 android/app/google-services.json
 pubspec.lock
 .gradle/
+lib/apikeys.dart
 
 # Miscellaneous
 *.class

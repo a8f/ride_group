@@ -12,12 +12,12 @@ import 'server.dart';
 
 class Login extends StatefulWidget {
   @override
-  LoginState createState() => LoginState();
+  _LoginState createState() => _LoginState();
 }
 
-class LoginState extends State<Login> {
+class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool loginLoading = false, noServerConnection = false, loginError = false;
   bool savedLoginTried = false;
 
@@ -25,17 +25,17 @@ class LoginState extends State<Login> {
     setState(() {
       loginLoading = true;
     });
-    GoogleSignInAccount account = await googleSignIn.signIn();
+    GoogleSignInAccount account = await _googleSignIn.signIn();
     GoogleSignInAuthentication auth = await account.authentication;
 
     AuthCredential credential = GoogleAuthProvider.getCredential(
         idToken: auth.idToken, accessToken: auth.accessToken);
 
-    FirebaseUser user = await _auth.signInWithCredential(credential);
-    assert(!user.isAnonymous);
-    assert(user.getIdToken() != null);
-    Server.firebaseUser = user;
-    return await Server.authenticate().catchError((error) {
+    FirebaseUser firebaseUser =
+        (await _auth.signInWithCredential(credential)).user;
+    assert(!firebaseUser.isAnonymous);
+    assert(firebaseUser.getIdToken() != null);
+    return await loginFirebaseUser(firebaseUser).catchError((error) {
       setState(() {
         noServerConnection = true;
         loginLoading = false;

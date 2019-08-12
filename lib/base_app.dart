@@ -26,8 +26,8 @@ class BaseAppState extends State<BaseApp> {
       currentIndex = 0;
     }
     return Scaffold(
-      appBar: _screens[currentIndex] is AppBarPage
-          ? (_screens[currentIndex] as AppBarPage).getAppBar(context)
+      appBar: _screens[currentIndex] is AppBarPageBase
+          ? (_screens[currentIndex] as AppBarPageBase).getAppBar(context)
           : null,
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

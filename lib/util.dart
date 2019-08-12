@@ -12,6 +12,6 @@ const EdgeInsets FORM_PADDING =
     EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
 const EdgeInsets SUBMIT_BUTTON_PADDING = EdgeInsets.symmetric(vertical: 16.0);
 
-abstract class AppBarPage {
+abstract class AppBarPageBase {
   AppBar getAppBar(BuildContext context);
 }

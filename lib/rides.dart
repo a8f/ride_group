@@ -4,7 +4,7 @@ import 'generated/i18n.dart';
 import 'server.dart';
 import 'util.dart';
 
-class Rides extends StatelessWidget implements AppBarPage {
+class Rides extends StatelessWidget implements AppBarPageBase {
   @override
   Widget build(BuildContext context) {
     // TODO
@@ -21,6 +21,6 @@ class Rides extends StatelessWidget implements AppBarPage {
   }
 
   @override
-  AppBar getAppBar(BuildContext context) => new AppBar(
-      title: Text(S.of(context).ridesAppBarTitle(Server.user.firstName)));
+  AppBar getAppBar(BuildContext context) =>
+      new AppBar(title: Text(S.of(context).ridesAppBarTitle(user.firstName)));
 }
