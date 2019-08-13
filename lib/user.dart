@@ -1,3 +1,6 @@
+import 'util.dart';
+import 'server.dart' as server;
+
 class User {
   String username;
   String email;
@@ -5,6 +8,7 @@ class User {
   DateTime dateJoined, lastLogin;
   String phone;
   String photoUrl;
+  List<Vehicle> vehicles;
 
   User(this.username, this.email, this.firstName, this.lastName,
       this.dateJoined, this.lastLogin, this.phone, this.photoUrl);

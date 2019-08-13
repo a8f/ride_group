@@ -25,5 +25,14 @@
   "rideDescriptionLabel": "Description",
   "createRide": "Create",
   "selectStartLocation": "Start from...",
-  "selectEndLocation": "Go to..."
+  "selectEndLocation": "Go to...",
+  "newVehicle": "New...",
+  "vehicleFriendlyName": "${name} (${color} ${make} ${model})",
+  "vehicleTitle": "Name (this will not be shown publicly)",
+  "vehicleMake": "Make",
+  "vehicleModel": "Model",
+  "vehicleColor": "Color",
+  "vehiclePlate": "License plate",
+  "vehicleYear": "Year",
+  "vehicleSelect": "Vehicle"
 }

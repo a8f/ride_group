@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'generated/i18n.dart';
 import 'util.dart';
+import 'server.dart';
 import 'apikeys.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:geolocator/geolocator.dart';
+import 'create_vehicle.dart';
 
 class CreateRide extends StatefulWidget {
   _CreateRideState createState() => _CreateRideState();
@@ -16,13 +18,44 @@ class _CreateRideState extends State<CreateRide> {
   final _endLocationTextController = TextEditingController();
   final _descriptionController = TextEditingController();
   LocationResult _startLocation, _endLocation;
+  Vehicle _selectedVehicle;
 
   @override
   void initState() {
     // Make sure we have location permissions here since there are bugs in
     // google_map_location_picker's handling of it
     promptForLocationPermission();
+    getVehicles();
     super.initState();
+  }
+
+  // Get the user's vehicles then rerun build
+  void getVehicles() async {
+    await getUserVehicles(user);
+    setState(() {});
+  }
+
+  List<DropdownMenuItem<Vehicle>> _vehicleDropdownMenuItems(
+      BuildContext context) {
+    List<DropdownMenuItem<Vehicle>> vehicleDropdownItems;
+    if (user.vehicles == null) {
+      vehicleDropdownItems = List<DropdownMenuItem<Vehicle>>();
+    } else {
+      vehicleDropdownItems =
+          user.vehicles.map<DropdownMenuItem<Vehicle>>((Vehicle v) {
+        return DropdownMenuItem<Vehicle>(
+          value: v,
+          child: Text(S
+              .of(context)
+              .vehicleFriendlyName(v.name, v.color, v.make, v.model)),
+        );
+      }).toList();
+    }
+    vehicleDropdownItems.insert(
+        0,
+        DropdownMenuItem<Vehicle>(
+            value: null, child: Text(S.of(context).newVehicle)));
+    return vehicleDropdownItems;
   }
 
   void promptForLocationPermission() async {
@@ -47,7 +80,6 @@ class _CreateRideState extends State<CreateRide> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO
     return Scaffold(
         body: Padding(
             padding: FORM_PADDING,
@@ -100,6 +132,20 @@ class _CreateRideState extends State<CreateRide> {
                                   decoration: InputDecoration(
                                       labelText:
                                           S.of(context).selectEndLocation))),
+                          DropdownButton<Vehicle>(
+                              value: _selectedVehicle,
+                              hint: Text(S.of(context).vehicleSelect),
+                              onChanged: (Vehicle v) {
+                                if (v == null) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => CreateVehicle()));
+                                  return;
+                                }
+                                setState(() {
+                                  _selectedVehicle = v;
+                                });
+                              },
+                              items: _vehicleDropdownMenuItems(context)),
                           Padding(
                               padding: SUBMIT_BUTTON_PADDING,
                               child: Center(

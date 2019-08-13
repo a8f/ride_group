@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'user.dart';
+import 'util.dart';
 
 FirebaseUser _firebaseUser;
 // URL of server with a trailing slash
@@ -27,12 +28,14 @@ Future<http.Response> _getRequest(String path) async {
       headers: {HttpHeaders.authorizationHeader: await _authorizationHeader()});
 }
 
-Future<http.Response> _postRequest(String path, dynamic body) async {
+Future<http.Response> _postRequest(String path, dynamic body,
+    {bool encodeJson = false}) async {
   if (path[0] == '/') path = path.substring(1);
   if (path[path.length - 1] != '/') path += '/';
+  var headers = {HttpHeaders.authorizationHeader: await _authorizationHeader()};
+  if (encodeJson) headers['Content-Type'] = 'application/json';
   return http.post(endpoint + path,
-      headers: {HttpHeaders.authorizationHeader: await _authorizationHeader()},
-      body: body);
+      headers: headers, body: encodeJson ? json.encode(body) : body);
 }
 
 Future<bool> testConnection() async {
@@ -71,5 +74,31 @@ Future<bool> registerUser() async {
     return false;
   }
   user = User.fromJson(json.decode(response.body));
+  return true;
+}
+
+Future<String> createNewVehicle(Vehicle vehicle) async {
+  http.Response response =
+      await _postRequest('create_vehicle/', vehicle.toJson(), encodeJson: true);
+  if (response.statusCode != 200) {
+    return response.body;
+  }
+  Vehicle newVehicle = Vehicle.fromJson(vehicle.toJson());
+  newVehicle.id = int.parse(response.body);
+  user.vehicles.add(newVehicle);
+  return '';
+}
+
+Future<bool> getUserVehicles(User user) async {
+  http.Response response = await _getRequest('my_vehicles/');
+  if (response.statusCode != 200) return false;
+  if (response.body.length == 0) {
+    user.vehicles = List<Vehicle>();
+    return true;
+  }
+  var vehicles = (json.decode(response.body) as List)
+      .map((v) => new Vehicle.fromJson(v))
+      .toList();
+  user.vehicles = vehicles;
   return true;
 }
