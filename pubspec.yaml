@@ -39,6 +39,7 @@ dev_dependencies:
   google_maps_flutter: ^0.5.20+2
   google_map_location_picker: ^1.0.5+2
   geolocator: ^5.1.2
+  datetime_picker_formfield: ^0.4.2
 
 
 # For information on the generic Dart part of this file, see the

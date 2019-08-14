@@ -77,7 +77,7 @@ Future<bool> registerUser() async {
   return true;
 }
 
-Future<String> createNewVehicle(Vehicle vehicle) async {
+Future<String> createVehicle(Vehicle vehicle) async {
   http.Response response =
       await _postRequest('create_vehicle/', vehicle.toJson(), encodeJson: true);
   if (response.statusCode != 200) {
@@ -101,4 +101,16 @@ Future<bool> getUserVehicles(User user) async {
       .toList();
   user.vehicles = vehicles;
   return true;
+}
+
+Future<Ride> createRide(Ride ride) async {
+  http.Response response =
+      await _postRequest('create_ride/', ride.toJson(), encodeJson: true);
+  debugPrint(response.body);
+  if (response.statusCode != 200) {
+    ride.id = null;
+    return ride;
+  }
+  ride.id = int.tryParse(response.body);
+  return ride;
 }

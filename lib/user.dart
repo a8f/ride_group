@@ -1,5 +1,4 @@
 import 'util.dart';
-import 'server.dart' as server;
 
 class User {
   String username;
@@ -9,9 +8,11 @@ class User {
   String phone;
   String photoUrl;
   List<Vehicle> vehicles;
+  int id = -1;
 
   User(this.username, this.email, this.firstName, this.lastName,
-      this.dateJoined, this.lastLogin, this.phone, this.photoUrl);
+      this.dateJoined, this.lastLogin, this.phone, this.photoUrl,
+      {this.id});
 
   User.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -25,6 +26,7 @@ class User {
         json['last_login'] == null ? null : DateTime.parse(json['last_login']);
     phone = json['phone'];
     photoUrl = json['photo_url'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -34,7 +36,8 @@ class User {
         'last_name': lastName,
         'date_joined': dateJoined.toIso8601String(),
         'phone': phone,
-        'photoUrl': photoUrl
+        'photoUrl': photoUrl,
+        'id': id
       };
 
   Map<String, String> registrationInfo() => {

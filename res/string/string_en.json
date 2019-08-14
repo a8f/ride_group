@@ -27,12 +27,18 @@
   "selectStartLocation": "Start from...",
   "selectEndLocation": "Go to...",
   "newVehicle": "New...",
-  "vehicleFriendlyName": "${name} (${color} ${make} ${model})",
+  "vehicleFriendlyName": "${name} (${plate})",
   "vehicleTitle": "Name (this will not be shown publicly)",
   "vehicleMake": "Make",
   "vehicleModel": "Model",
   "vehicleColor": "Color",
   "vehiclePlate": "License plate",
   "vehicleYear": "Year",
-  "vehicleSelect": "Vehicle"
+  "vehicleSelect": "Vehicle",
+  "rideTimeLabel": "Date and Time",
+  "driverNameLabel": "Driver: ${driver}",
+  "startLocationLabel": "From ${start}",
+  "endLocationLabel": "To ${end}",
+  "departureTimeLabel": "Leaving ${time}",
+  "rideVehicleInfo": "Riding in a ${color} ${year} ${make} ${model} (${plate})"
 }

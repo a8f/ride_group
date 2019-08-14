@@ -4,6 +4,8 @@ import 'util.dart';
 import 'server.dart';
 import 'apikeys.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'create_vehicle.dart';
 
@@ -17,22 +19,16 @@ class _CreateRideState extends State<CreateRide> {
   final _startLocationTextController = TextEditingController();
   final _endLocationTextController = TextEditingController();
   final _descriptionController = TextEditingController();
-  LocationResult _startLocation, _endLocation;
+  Place _startLocation, _endLocation;
   Vehicle _selectedVehicle;
+  DateTime _selectedDateTime;
 
   @override
   void initState() {
     // Make sure we have location permissions here since there are bugs in
     // google_map_location_picker's handling of it
     promptForLocationPermission();
-    getVehicles();
     super.initState();
-  }
-
-  // Get the user's vehicles then rerun build
-  void getVehicles() async {
-    await getUserVehicles(user);
-    setState(() {});
   }
 
   List<DropdownMenuItem<Vehicle>> _vehicleDropdownMenuItems(
@@ -45,9 +41,7 @@ class _CreateRideState extends State<CreateRide> {
           user.vehicles.map<DropdownMenuItem<Vehicle>>((Vehicle v) {
         return DropdownMenuItem<Vehicle>(
           value: v,
-          child: Text(S
-              .of(context)
-              .vehicleFriendlyName(v.name, v.color, v.make, v.model)),
+          child: Text(S.of(context).vehicleFriendlyName(v.name, v.plate)),
         );
       }).toList();
     }
@@ -56,6 +50,13 @@ class _CreateRideState extends State<CreateRide> {
         DropdownMenuItem<Vehicle>(
             value: null, child: Text(S.of(context).newVehicle)));
     return vehicleDropdownItems;
+  }
+
+  void createRideAndGoBack(BuildContext context, Ride ride) async {
+    ride = await createRide(ride);
+    if (ride.id != null) {
+      Navigator.of(context).pop(ride);
+    }
   }
 
   void promptForLocationPermission() async {
@@ -75,8 +76,6 @@ class _CreateRideState extends State<CreateRide> {
         return;
     }
   }
-
-  void createRide() {}
 
   @override
   Widget build(BuildContext context) {
@@ -102,12 +101,11 @@ class _CreateRideState extends State<CreateRide> {
                                       S.of(context).rideDescriptionLabel)),
                           GestureDetector(
                               onTap: () async {
-                                _startLocation =
+                                _startLocation = Place.fromLocationResult(
                                     await LocationPicker.pickLocation(
-                                        context, MAPS_API_KEY);
+                                        context, MAPS_API_KEY));
                                 _startLocationTextController.text =
-                                    _startLocation.address ??
-                                        _startLocation.latLng.toString();
+                                    _startLocation.toString();
                               },
                               behavior: HitTestBehavior.opaque,
                               child: TextFormField(
@@ -118,12 +116,11 @@ class _CreateRideState extends State<CreateRide> {
                                           S.of(context).selectStartLocation))),
                           GestureDetector(
                               onTap: () async {
-                                _endLocation =
+                                _endLocation = Place.fromLocationResult(
                                     await LocationPicker.pickLocation(
-                                        context, MAPS_API_KEY);
+                                        context, MAPS_API_KEY));
                                 _endLocationTextController.text =
-                                    _endLocation.address ??
-                                        _endLocation.latLng.toString();
+                                    _endLocation.toString();
                               },
                               behavior: HitTestBehavior.opaque,
                               child: TextFormField(
@@ -146,12 +143,50 @@ class _CreateRideState extends State<CreateRide> {
                                 });
                               },
                               items: _vehicleDropdownMenuItems(context)),
+                          DateTimeField(
+                              decoration: InputDecoration(
+                                  labelText: S.of(context).rideTimeLabel),
+                              format: defaultDateFormat,
+                              onShowPicker: (context, currentValue) async {
+                                DateTime date = await showDatePicker(
+                                    context: context,
+                                    firstDate: DateTime.now(),
+                                    initialDate: currentValue ?? DateTime.now(),
+                                    lastDate:
+                                        DateTime(DateTime.now().year + 1));
+                                TimeOfDay time = await showTimePicker(
+                                    context: context,
+                                    initialTime:
+                                        TimeOfDay.fromDateTime(DateTime.now()));
+                                DateTime selected = DateTime(
+                                    date.year,
+                                    date.month,
+                                    date.day,
+                                    time.hour,
+                                    time.minute);
+                                setState(() {
+                                  _selectedDateTime = selected;
+                                });
+                                return selected;
+                              }),
                           Padding(
                               padding: SUBMIT_BUTTON_PADDING,
                               child: Center(
                                   child: MaterialButton(
                                       child: Text(S.of(context).createRide),
-                                      onPressed: createRide)))
+                                      onPressed: () {
+                                        if (_formKey.currentState.validate()) {
+                                          Ride newRide = Ride(
+                                              _selectedVehicle,
+                                              user,
+                                              _titleController.value.text,
+                                              _descriptionController.value.text,
+                                              _startLocation,
+                                              _endLocation,
+                                              _selectedDateTime);
+                                          createRideAndGoBack(context, newRide);
+                                        }
+                                      })))
                         ])))),
         appBar: AppBar());
   }

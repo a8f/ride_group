@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'generated/i18n.dart';
 import 'util.dart';
 import 'server.dart';
-import 'apikeys.dart';
-import 'server.dart' as server;
 
 class CreateVehicle extends StatefulWidget {
   _CreateVehicleState createState() => _CreateVehicleState();
@@ -20,14 +18,18 @@ class _CreateVehicleState extends State<CreateVehicle> {
 
   @override
   void initState() {
+    _nameController.text = 'name';
+    _makeController.text = 'make';
+    _modelController.text = 'model';
+    _colorController.text = 'color';
+    _plateController.text = 'plate';
+    _yearController.text = '2002';
     super.initState();
   }
 
-  void createVehicle(BuildContext context) async {
-    debugPrint('creating');
+  void validateAndCreate(BuildContext context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (_formKey.currentState.validate()) {
-      debugPrint('valid');
       Vehicle v = Vehicle(
           -1,
           _nameController.text,
@@ -38,7 +40,7 @@ class _CreateVehicleState extends State<CreateVehicle> {
           false,
           4,
           int.parse(_yearController.text));
-      String result = await createNewVehicle(v);
+      String result = await createVehicle(v);
       if (result.length == 0) {
         Navigator.of(context).pop();
         return;
@@ -99,7 +101,7 @@ class _CreateVehicleState extends State<CreateVehicle> {
                                   child: MaterialButton(
                                       child: Text(S.of(context).createRide),
                                       onPressed: () {
-                                        createVehicle(context);
+                                        validateAndCreate(context);
                                       })))
                         ])))),
         appBar: AppBar());

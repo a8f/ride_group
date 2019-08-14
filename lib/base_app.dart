@@ -9,10 +9,14 @@ import 'account.dart';
 import 'rides.dart';
 import 'search.dart';
 import 'create_ride.dart';
+import 'ride_info.dart';
 
 class BaseApp extends StatefulWidget {
   /// Base app containing the bottom navigation bar and the widgets for each screen
-  BaseAppState createState() => BaseAppState();
+  BaseAppState createState() {
+    getUserVehicles(user);
+    return BaseAppState();
+  }
 }
 
 class BaseAppState extends State<BaseApp> {
@@ -56,9 +60,13 @@ class BaseAppState extends State<BaseApp> {
           : null,
     );
   }
-}
 
-void openNewRideCreation(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => CreateRide()));
+  void openNewRideCreation(BuildContext context) async {
+    Ride result = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => CreateRide()));
+    if (result != null) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => RideInfo(ride: result)));
+    }
+  }
 }
