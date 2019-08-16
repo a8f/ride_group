@@ -28,7 +28,7 @@ class _MyRidesState extends State<MyRides> {
   void loadUserRides() async {
     _rides = await currentUserRides().catchError((error) {
       // TODO
-      debugPrint(error);
+      debugPrint(error.toString());
       return;
     });
     _ridesLoading = false;
@@ -44,7 +44,7 @@ class _MyRidesState extends State<MyRides> {
                 visible: _ridesLoading,
                 child: SpinKitRing(color: Theme.of(context).accentColor)));
       }
-      return Text(S.of(context).myRidesEmpty);
+      return Center(child: Text(S.of(context).myRidesEmpty));
     }
     final DateFormat dateFormat =
         DateFormat.yMMMd(Localizations.localeOf(context).languageCode);

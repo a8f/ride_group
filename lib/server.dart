@@ -12,7 +12,7 @@ import 'vehicle.dart';
 
 FirebaseUser _firebaseUser;
 // URL of server with a trailing slash
-const String endpoint = 'http://192.168.0.126:8000/';
+const String endpoint = 'http://10.0.2.2:8000/';
 User user;
 
 bool serverConnectionInitialized() => _firebaseUser != null;
@@ -94,7 +94,7 @@ Future<String> createVehicle(Vehicle vehicle) async {
 Future<bool> userVehicles(User user) async {
   http.Response response = await _getRequest('my_vehicles/');
   if (response.statusCode != 200) return false;
-  if (response.body.length == 0) {
+  if (response.body == EMPTY_JSON_RESPONSE) {
     user.vehicles = List<Vehicle>();
     return true;
   }
@@ -122,7 +122,7 @@ Future<List<Ride>> currentUserRides() async {
     debugPrint('Server returned status ${response.statusCode}');
     throw StateError('Server returned status ${response.statusCode}');
   }
-  if (response.body.length == 0) return List<Ride>();
+  if (response.body == EMPTY_JSON_RESPONSE) return List<Ride>();
   var rides = (json.decode(response.body) as List)
       .map((r) => new Ride.fromJson(r))
       .toList();

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 const EdgeInsets FORM_PADDING =
     EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
 const EdgeInsets SUBMIT_BUTTON_PADDING = EdgeInsets.symmetric(vertical: 16.0);
-
+const EMPTY_JSON_RESPONSE = '""';
 DateFormat defaultDateFormat = DateFormat();
 
 abstract class AppBarPageBase {
