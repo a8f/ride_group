@@ -40,5 +40,8 @@
   "startLocationLabel": "From ${start}",
   "endLocationLabel": "To ${end}",
   "departureTimeLabel": "Leaving ${time}",
-  "rideVehicleInfo": "Riding in a ${color} ${year} ${make} ${model} (${plate})"
+  "rideVehicleInfo": "Riding in a ${color} ${year} ${make} ${model} (${plate})",
+  "rideLocationInfo": "${start} to ${end}",
+  "rideTimeInfo": "On ${date} at ${time}",
+  "myRidesEmpty": "You aren't in any rides"
 }

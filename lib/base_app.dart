@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'generated/i18n.dart';
 import 'server.dart';
 import 'util.dart';
+import 'ride.dart';
 import 'theme.dart';
 import 'home.dart';
 import 'account.dart';
-import 'rides.dart';
+import 'my_rides.dart';
 import 'search.dart';
 import 'create_ride.dart';
 import 'ride_info.dart';
@@ -14,13 +15,13 @@ import 'ride_info.dart';
 class BaseApp extends StatefulWidget {
   /// Base app containing the bottom navigation bar and the widgets for each screen
   BaseAppState createState() {
-    getUserVehicles(user);
+    userVehicles(user);
     return BaseAppState();
   }
 }
 
 class BaseAppState extends State<BaseApp> {
-  final List<Widget> _screens = [Home(), Rides(), Search(), Account()];
+  final List<Widget> _screens = [Home(), MyRides(), Search(), Account()];
   int currentIndex = 0;
 
   @override

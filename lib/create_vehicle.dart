@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'generated/i18n.dart';
 import 'util.dart';
 import 'server.dart';
+import 'vehicle.dart';
 
 class CreateVehicle extends StatefulWidget {
   _CreateVehicleState createState() => _CreateVehicleState();

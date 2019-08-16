@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 import 'user.dart';
 import 'util.dart';
+import 'ride.dart';
+import 'vehicle.dart';
 
 FirebaseUser _firebaseUser;
 // URL of server with a trailing slash
@@ -89,7 +91,7 @@ Future<String> createVehicle(Vehicle vehicle) async {
   return '';
 }
 
-Future<bool> getUserVehicles(User user) async {
+Future<bool> userVehicles(User user) async {
   http.Response response = await _getRequest('my_vehicles/');
   if (response.statusCode != 200) return false;
   if (response.body.length == 0) {
@@ -106,11 +108,23 @@ Future<bool> getUserVehicles(User user) async {
 Future<Ride> createRide(Ride ride) async {
   http.Response response =
       await _postRequest('create_ride/', ride.toJson(), encodeJson: true);
-  debugPrint(response.body);
   if (response.statusCode != 200) {
     ride.id = null;
     return ride;
   }
   ride.id = int.tryParse(response.body);
   return ride;
+}
+
+Future<List<Ride>> currentUserRides() async {
+  http.Response response = await _getRequest('my_rides/');
+  if (response.statusCode != 200) {
+    debugPrint('Server returned status ${response.statusCode}');
+    throw StateError('Server returned status ${response.statusCode}');
+  }
+  if (response.body.length == 0) return List<Ride>();
+  var rides = (json.decode(response.body) as List)
+      .map((r) => new Ride.fromJson(r))
+      .toList();
+  return rides;
 }

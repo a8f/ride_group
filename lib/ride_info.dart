@@ -4,6 +4,8 @@ import 'generated/i18n.dart';
 import 'server.dart';
 import 'util.dart';
 import 'package:intl/intl.dart';
+import 'ride.dart';
+import 'vehicle.dart';
 
 class RideInfo extends StatelessWidget {
   final Ride ride;
@@ -18,7 +20,7 @@ class RideInfo extends StatelessWidget {
     var s = S.of(context);
     // TODO
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text(ride.title)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

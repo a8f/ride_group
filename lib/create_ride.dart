@@ -3,9 +3,12 @@ import 'generated/i18n.dart';
 import 'util.dart';
 import 'server.dart';
 import 'apikeys.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'ride.dart';
+import 'vehicle.dart';
 import 'package:geolocator/geolocator.dart';
 import 'create_vehicle.dart';
 
@@ -22,12 +25,11 @@ class _CreateRideState extends State<CreateRide> {
   Place _startLocation, _endLocation;
   Vehicle _selectedVehicle;
   DateTime _selectedDateTime;
+  LatLng _initialLocation;
 
   @override
   void initState() {
-    // Make sure we have location permissions here since there are bugs in
-    // google_map_location_picker's handling of it
-    promptForLocationPermission();
+    getInitialLocation();
     super.initState();
   }
 
@@ -48,7 +50,9 @@ class _CreateRideState extends State<CreateRide> {
     vehicleDropdownItems.insert(
         0,
         DropdownMenuItem<Vehicle>(
-            value: null, child: Text(S.of(context).newVehicle)));
+            value:
+                Vehicle(null, null, null, null, null, null, null, null, null),
+            child: Text(S.of(context).newVehicle)));
     return vehicleDropdownItems;
   }
 
@@ -59,22 +63,10 @@ class _CreateRideState extends State<CreateRide> {
     }
   }
 
-  void promptForLocationPermission() async {
-    final GeolocationStatus permission =
-        await Geolocator().checkGeolocationPermissionStatus();
-    switch (permission) {
-      case GeolocationStatus.granted:
-        return;
-      case GeolocationStatus.unknown:
-        // Try to get position, which will prompt for location permissions
-        final Position pos = await Geolocator().getCurrentPosition();
-        break;
-      case GeolocationStatus.disabled:
-        return;
-      default:
-        debugPrint('Denied permissions');
-        return;
-    }
+  void getInitialLocation() async {
+    final initialPosition = await Geolocator().getCurrentPosition();
+    _initialLocation =
+        LatLng(initialPosition.latitude, initialPosition.longitude);
   }
 
   @override
@@ -103,7 +95,8 @@ class _CreateRideState extends State<CreateRide> {
                               onTap: () async {
                                 _startLocation = Place.fromLocationResult(
                                     await LocationPicker.pickLocation(
-                                        context, MAPS_API_KEY));
+                                        context, MAPS_API_KEY,
+                                        initialCenter: _initialLocation));
                                 _startLocationTextController.text =
                                     _startLocation.toString();
                               },
@@ -118,7 +111,8 @@ class _CreateRideState extends State<CreateRide> {
                               onTap: () async {
                                 _endLocation = Place.fromLocationResult(
                                     await LocationPicker.pickLocation(
-                                        context, MAPS_API_KEY));
+                                        context, MAPS_API_KEY,
+                                        initialCenter: _initialLocation));
                                 _endLocationTextController.text =
                                     _endLocation.toString();
                               },
@@ -131,9 +125,8 @@ class _CreateRideState extends State<CreateRide> {
                                           S.of(context).selectEndLocation))),
                           DropdownButton<Vehicle>(
                               value: _selectedVehicle,
-                              hint: Text(S.of(context).vehicleSelect),
                               onChanged: (Vehicle v) {
-                                if (v == null) {
+                                if (v.id == null) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => CreateVehicle()));
                                   return;
@@ -142,7 +135,9 @@ class _CreateRideState extends State<CreateRide> {
                                   _selectedVehicle = v;
                                 });
                               },
-                              items: _vehicleDropdownMenuItems(context)),
+                              isExpanded: false,
+                              items: _vehicleDropdownMenuItems(context),
+                              hint: Text(S.of(context).vehicleSelect)),
                           DateTimeField(
                               decoration: InputDecoration(
                                   labelText: S.of(context).rideTimeLabel),
