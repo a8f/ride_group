@@ -1,4 +1,3 @@
-import 'util.dart';
 import 'vehicle.dart';
 
 class User {

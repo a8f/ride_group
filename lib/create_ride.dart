@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'generated/i18n.dart';
-import 'util.dart';
-import 'server.dart';
-import 'apikeys.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:intl/intl.dart';
-import 'ride.dart';
-import 'vehicle.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'apikeys.dart';
 import 'create_vehicle.dart';
+import 'generated/i18n.dart';
+import 'ride.dart';
+import 'server.dart';
+import 'util.dart';
+import 'vehicle.dart';
 
 class CreateRide extends StatefulWidget {
   _CreateRideState createState() => _CreateRideState();
@@ -168,6 +168,7 @@ class _CreateRideState extends State<CreateRide> {
                               padding: SUBMIT_BUTTON_PADDING,
                               child: Center(
                                   child: MaterialButton(
+                                      color: Theme.of(context).buttonColor,
                                       child: Text(S.of(context).createRide),
                                       onPressed: () {
                                         if (_formKey.currentState.validate()) {

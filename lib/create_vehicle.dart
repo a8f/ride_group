@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'generated/i18n.dart';
-import 'util.dart';
 import 'server.dart';
+import 'util.dart';
 import 'vehicle.dart';
 
 class CreateVehicle extends StatefulWidget {
@@ -100,6 +101,7 @@ class _CreateVehicleState extends State<CreateVehicle> {
                               padding: SUBMIT_BUTTON_PADDING,
                               child: Center(
                                   child: MaterialButton(
+                                      color: Theme.of(context).buttonColor,
                                       child: Text(S.of(context).createRide),
                                       onPressed: () {
                                         validateAndCreate(context);

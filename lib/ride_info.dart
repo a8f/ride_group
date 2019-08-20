@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'generated/i18n.dart';
-import 'server.dart';
-import 'util.dart';
-import 'package:intl/intl.dart';
 import 'ride.dart';
-import 'vehicle.dart';
 
 class RideInfo extends StatelessWidget {
   final Ride ride;

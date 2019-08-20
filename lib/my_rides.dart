@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+
 import 'generated/i18n.dart';
+import 'ride.dart';
+import 'ride_info.dart';
 import 'server.dart';
 import 'util.dart';
-import 'ride.dart';
-import 'vehicle.dart';
-import 'ride_info.dart';
 
 class MyRides extends StatefulWidget implements AppBarPageBase {
   _MyRidesState createState() => _MyRidesState();

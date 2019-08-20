@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'generated/i18n.dart';
 import 'user.dart';
-import 'util.dart';
 
 class Profile extends StatelessWidget {
   final User user;

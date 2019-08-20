@@ -43,5 +43,16 @@
   "rideVehicleInfo": "Riding in a ${color} ${year} ${make} ${model} (${plate})",
   "rideLocationInfo": "${start} to ${end}",
   "rideTimeInfo": "On ${date} at ${time}",
-  "myRidesEmpty": "You aren't in any rides"
+  "myRidesEmpty": "You aren't in any rides",
+  "searchTitleHint": "Title",
+  "searchStartHint": "From",
+  "searchEndHint": "To",
+  "searchAdvanced": "Advanced",
+  "searchSubmit": "Search",
+  "searchTitleValidationFail": "Enter more than 2 characters",
+  "searchStartValidationFail": "Enter more than 2 characters",
+  "searchEndValidationFail": "Enter more than 2 characters",
+  "searchMaxStartDist": "Max departure distance",
+  "searchMaxEndDist": "Max arrival distance",
+  "noRideSearchResults": "No matching rides found"
 }

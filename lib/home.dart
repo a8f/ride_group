@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'generated/i18n.dart';
 import 'util.dart';
 

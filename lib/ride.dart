@@ -1,7 +1,6 @@
-import 'vehicle.dart';
 import 'user.dart';
 import 'util.dart';
-import 'dart:convert';
+import 'vehicle.dart';
 
 class Ride {
   int id = -1;

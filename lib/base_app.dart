@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'account.dart';
+import 'create_ride.dart';
 import 'generated/i18n.dart';
+import 'home.dart';
+import 'my_rides.dart';
+import 'ride.dart';
+import 'ride_info.dart';
+import 'search.dart';
 import 'server.dart';
 import 'util.dart';
-import 'ride.dart';
-import 'theme.dart';
-import 'home.dart';
-import 'account.dart';
-import 'my_rides.dart';
-import 'search.dart';
-import 'create_ride.dart';
-import 'ride_info.dart';
 
 class BaseApp extends StatefulWidget {
   /// Base app containing the bottom navigation bar and the widgets for each screen

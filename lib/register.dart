@@ -154,6 +154,7 @@ class _RegistrationFormState extends State<_RegistrationForm> {
                         padding: SUBMIT_BUTTON_PADDING,
                         child: Center(
                             child: MaterialButton(
+                          color: Theme.of(context).buttonColor,
                           child: Text(S.of(context).submitRegistration),
                           onPressed: register,
                         )))

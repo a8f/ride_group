@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'generated/i18n.dart';
 import 'server.dart';
 import 'util.dart';
 
