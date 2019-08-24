@@ -26,15 +26,20 @@ Future<String> _authorizationHeader() async {
 Future<http.Response> _getRequest(String path) async {
   if (path[0] == '/') path = path.substring(1);
   if (path[path.length - 1] != '/') path += '/';
-  return http.get(endpoint + path,
-      headers: {HttpHeaders.authorizationHeader: await _authorizationHeader()});
+  return http.get(endpoint + path, headers: {
+    HttpHeaders.authorizationHeader: await _authorizationHeader(),
+    'Client-Version': await appVersion()
+  });
 }
 
 Future<http.Response> _postRequest(String path, dynamic body,
     {bool encodeJson = false}) async {
   if (path[0] == '/') path = path.substring(1);
   if (path[path.length - 1] != '/') path += '/';
-  var headers = {HttpHeaders.authorizationHeader: await _authorizationHeader()};
+  var headers = {
+    HttpHeaders.authorizationHeader: await _authorizationHeader(),
+    'Client-Version': await appVersion()
+  };
   if (encodeJson) headers['Content-Type'] = 'application/json';
   return http.post(endpoint + path,
       headers: headers, body: encodeJson ? json.encode(body) : body);

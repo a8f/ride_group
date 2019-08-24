@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'vehicle.dart';
 
 class User {
@@ -9,12 +11,11 @@ class User {
   String photoUrl;
   List<Vehicle> vehicles;
   int id = -1;
-
-  User(this.username, this.email, this.firstName, this.lastName,
-      this.dateJoined, this.lastLogin, this.phone, this.photoUrl,
-      {this.id});
+  int ridesPassenger, ridesDriver;
+  double passengerRating, driverRating;
 
   User.fromJson(Map<String, dynamic> json) {
+    debugPrint(json.toString());
     username = json['username'];
     email = json['email'];
     firstName = json['first_name'];
@@ -27,6 +28,10 @@ class User {
     phone = json['phone'];
     photoUrl = json['photo_url'];
     id = json['id'];
+    ridesPassenger = json['rides_passenger'];
+    ridesDriver = json['rides_driver'];
+    driverRating = json['rating_driver'];
+    passengerRating = json['rating_passenger'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -37,7 +42,11 @@ class User {
         'date_joined': dateJoined.toIso8601String(),
         'phone': phone,
         'photoUrl': photoUrl,
-        'id': id
+        'id': id,
+        'rides_passenger': ridesPassenger,
+        'rides_driver': ridesDriver,
+        'rating_driver': driverRating,
+        'rating_passenger': passengerRating
       };
 
   Map<String, String> registrationInfo() => {

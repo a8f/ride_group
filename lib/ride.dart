@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'user.dart';
 import 'util.dart';
 import 'vehicle.dart';
@@ -18,10 +20,14 @@ class Ride {
   Ride.fromJson(Map<String, dynamic> rideJson) {
     id = rideJson['id'];
     driver = User.fromJson(rideJson['owner']);
-    start = Place.fromLatLng(
-        rideJson['start_loc'], rideJson['start_lat'], rideJson['start_long']);
-    end = Place.fromLatLng(
-        rideJson['end_loc'], rideJson['end_lat'], rideJson['end_long']);
+    start = Place(
+        rideJson['start_loc_name'],
+        LatLng(rideJson['start_loc']['latitude'],
+            rideJson['start_loc']['longitude']));
+    end = Place(
+        rideJson['end_loc_name'],
+        LatLng(
+            rideJson['end_loc']['latitude'], rideJson['end_loc']['longitude']));
     title = rideJson['title'];
     description = rideJson['description'];
     vehicle = Vehicle.fromJson(rideJson['vehicle']);
@@ -35,12 +41,12 @@ class Ride {
         'id': id,
         'vehicle': vehicle.toJson(),
         'time': time.toIso8601String(),
-        'start_loc': start.name,
-        'start_lat': start.latLng.latitude,
-        'start_long': start.latLng.longitude,
-        'end_loc': end.name,
-        'end_lat': end.latLng.latitude,
-        'end_long': end.latLng.longitude,
+        'start_loc_name': start.name,
+        'start_loc':
+            '{"latitude": ${start.latLng.latitude}, "longitude": ${start.latLng.longitude}}',
+        'end_loc_name': end.name,
+        'end_loc':
+            '{"latitude": ${end.latLng.latitude}, "longitude": ${end.latLng.longitude}}',
         'owner': driver.toJson(),
         'title': title,
         'description': description

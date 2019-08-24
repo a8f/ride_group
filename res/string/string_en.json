@@ -54,5 +54,8 @@
   "searchEndValidationFail": "Enter more than 2 characters",
   "searchMaxStartDist": "Max departure distance",
   "searchMaxEndDist": "Max arrival distance",
-  "noRideSearchResults": "No matching rides found"
+  "noRideSearchResults": "No matching rides found",
+  "averageDriverRating": "over ${count} rides as driver",
+  "averagePassengerRating": "over ${count} rides as a passenger",
+  "editProfile": "Edit"
 }

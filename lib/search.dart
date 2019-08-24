@@ -33,22 +33,24 @@ class _SearchState extends State<Search> {
   @override
   initState() {
     super.initState();
-    getInitialLocation();
-  }
-
-  void getInitialLocation() async {
-    _location = await Geolocator().getCurrentPosition();
   }
 
   void _submitSearch() async {
     //if (!_formKey.currentState.validate()) return;
     FocusScope.of(context).requestFocus(new FocusNode());
-    final rides = await searchRides(searchQueryJson());
-    debugPrint(rides[0].toString());
-    setState(() => _rides = rides);
+    setState(() {
+      _ridesLoading = true;
+      _rides = [];
+    });
+    final rides = await searchRides(await searchQueryJson());
+    setState(() {
+      _ridesLoading = false;
+      _rides = rides;
+    });
   }
 
-  Map<String, dynamic> searchQueryJson() {
+  Future<Map<String, dynamic>> searchQueryJson() async {
+    _location = await Geolocator().getCurrentPosition();
     Map<String, dynamic> queryJson = Map<String, dynamic>();
     queryJson['title'] = _titleController.text;
     queryJson['latitude'] = _location.latitude;
@@ -57,8 +59,8 @@ class _SearchState extends State<Search> {
       queryJson['start_loc_name'] = _startLocationController.text;
     if (_endLocationController.text.isNotEmpty)
       queryJson['end_loc_name'] = _endLocationController.text;
-    if (_maxStartDist != null) queryJson['start_max_dist'] = _maxStartDist;
-    if (_maxEndDist != null) queryJson['end_max_dist'] = _maxEndDist;
+    if (_maxStartDist != null) queryJson['max_start_dist'] = _maxStartDist;
+    if (_maxEndDist != null) queryJson['max_end_dist'] = _maxEndDist;
     return queryJson;
   }
 
